@@ -1,7 +1,7 @@
 from django.urls import path
 from mailing_list.apps import MailingListConfig
 from mailing_list.views import IndexView, ClientListView, ClientDetailView, ClientCreateView, ClientUpdateView, \
-    ClientDeleteView
+    ClientDeleteView, client_toggle_activity
 
 app_name = MailingListConfig.name
 
@@ -12,4 +12,5 @@ urlpatterns = [
     path('client/create/', ClientCreateView.as_view(), name='client_create'),
     path('client/update/<int:pk>/', ClientUpdateView.as_view(), name='client_update'),
     path('client/delete/<int:pk>', ClientDeleteView.as_view(), name='client_delete'),
+    path('client/toggle/<int:pk>', client_toggle_activity, name='client_toggle_activity'),
 ]

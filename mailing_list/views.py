@@ -4,6 +4,7 @@ from mailing_list.models import Client, MailingListMessage, MailingList, Mailing
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.http import Http404
+from django.shortcuts import render, get_object_or_404, reverse, redirect
 from mailing_list.forms import ClientForm
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
@@ -43,14 +44,29 @@ class ClientCreateView(LoginRequiredMixin, CreateView):
 
 class ClientUpdateView(UpdateView):
     model = Client
+    form_class = ClientForm
+    success_url = reverse_lazy('mailing_list:client_list')
 
-    def get_object(self, queryset=None):
-        self.object = super().get_object(queryset)
-        if self.object.created != self.request.user and not self.request.user.is_staff:
-            raise Http404
-        return self.object
+    # def get_object(self, queryset=None):
+    #     self.object = super().get_object(queryset)
+    #     if self.object.created != self.request.user and not self.request.user.is_staff:
+    #         raise Http404
+    #     return self.object
+
+    # def get_success_url(self):
+    #     return reverse('mailing_list:client_list', args=[self.kwargs.get('pk')])
 
 
 class ClientDeleteView(DeleteView):
     model = Client
-    success_url = reverse_lazy('mailing_list:index')
+    success_url = reverse_lazy('mailing_list:client_list')
+
+
+def client_toggle_activity(request, pk):
+    client_item = get_object_or_404(Client, pk=pk)
+    if client_item.is_active:
+        client_item.is_active = False
+    else:
+        client_item.is_active = True
+    client_item.save()
+    return redirect(reverse('mailing_list:client_list'))
