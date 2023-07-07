@@ -21,8 +21,26 @@ class ClientListView(LoginRequiredMixin, ListView):
     model = Client
     extra_context = {
         'title': 'Список клиентов',
-        'object_list': Client.objects.all()
     }
+
+    def get_queryset(self):
+        """Метод благодаря которому отображаются только неактивные записи"""
+        queryset = super().get_queryset()
+        queryset = queryset.filter(is_active=True)
+        return queryset
+
+
+class ClientDeactivatedListView(LoginRequiredMixin, ListView):
+    model = Client
+    extra_context = {
+        'title': 'Неактивные клиенты',
+    }
+
+    def get_queryset(self):
+        """Метод благодаря которому отображаются только неактивные записи"""
+        queryset = super().get_queryset()
+        queryset = queryset.filter(is_active=False)
+        return queryset
 
 
 class ClientDetailView(DetailView):
@@ -32,7 +50,7 @@ class ClientDetailView(DetailView):
 class ClientCreateView(LoginRequiredMixin, CreateView):
     model = Client
     form_class = ClientForm
-    success_url = reverse_lazy('mailing_list:homepage')
+    success_url = reverse_lazy('mailing_list:client_list')
 
     def form_valid(self, form):
         self.object = form.save()

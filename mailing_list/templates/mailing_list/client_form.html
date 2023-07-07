@@ -9,15 +9,18 @@
                     {{ form.as_p }}
                     <input type="submit" class="btn btn-success"
                            value="{% if object %}Сохранить{% else %}Создать{% endif %}">
-                </form>
-                <a href="{% url 'mailing_list:client_toggle_activity' client.pk %}"
-                   class="btn btn-warning float-right">
-                    {% if client.is_active %}
-                        Деактивировать
-                    {% else %}
-                        Активировать
+                    {% if client %}
+                        <a href="{% url 'mailing_list:client_toggle_activity' client.pk %}"
+                           class="btn btn-warning float-right">
+                        {% if client.is_active %}
+                            Деактивировать
+                        {% else %}
+                            Активировать
+                        {% endif %}
                     {% endif %}
-                </a>
+                    </a>
+                </form>
+
             </div>
             <div class="card-footer">
                 <a href="{% url 'mailing_list:client_list' %}" class="btn btn-primary"><< Назад</a>
