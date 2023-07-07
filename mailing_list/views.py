@@ -12,8 +12,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 class IndexView(LoginRequiredMixin, TemplateView):
     template_name = 'mailing_list/index.html'
     extra_context = {
-        'title': 'Домашняя страница',
-        'object_list': MailingListMessage.objects.all()
+        'title_0': 'Наши рассылки',
+        'mailing_lists': MailingListMessage.objects.all(),
+        'title_1': 'Наши клиенты',
+        'client_list': Client.objects.filter(is_active=True),
     }
 
 
@@ -65,15 +67,6 @@ class ClientUpdateView(UpdateView):
     form_class = ClientForm
     success_url = reverse_lazy('mailing_list:client_list')
 
-    # def get_object(self, queryset=None):
-    #     self.object = super().get_object(queryset)
-    #     if self.object.created != self.request.user and not self.request.user.is_staff:
-    #         raise Http404
-    #     return self.object
-
-    # def get_success_url(self):
-    #     return reverse('mailing_list:client_list', args=[self.kwargs.get('pk')])
-
 
 class ClientDeleteView(DeleteView):
     model = Client
@@ -88,3 +81,15 @@ def client_toggle_activity(request, pk):
         client_item.is_active = True
     client_item.save()
     return redirect(reverse('mailing_list:client_list'))
+
+
+class MailingListMessageListView(LoginRequiredMixin, ListView):
+    model = MailingListMessage
+    extra_context = {
+        'title': 'Наши рассылки',
+        'mailing_lists': MailingListMessage.objects.all(),
+    }
+
+
+class MailingListMessageDetailView(DetailView):
+    model = MailingListMessage
