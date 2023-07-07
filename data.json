@@ -1,0 +1,81 @@
+[
+  {
+    "model": "mailing_list.client",
+    "pk": 1,
+    "fields": {
+      "first_name": "Petr",
+      "last_name": "Petrov",
+      "surname": null,
+      "email": "petrov@sky.pro",
+      "created": 1,
+      "is_active": true
+    }
+  },
+  {
+    "model": "mailing_list.client",
+    "pk": 7,
+    "fields": {
+      "first_name": "Ivan",
+      "last_name": "Ivanov",
+      "surname": null,
+      "email": "ivanov@sly.pro",
+      "created": null,
+      "is_active": true
+    }
+  },
+  {
+    "model": "mailing_list.client",
+    "pk": 8,
+    "fields": {
+      "first_name": "Sidor",
+      "last_name": "Sidorov",
+      "surname": null,
+      "email": "sidorov@sky.pro",
+      "created": null,
+      "is_active": true
+    }
+  },
+  {
+    "model": "mailing_list.client",
+    "pk": 9,
+    "fields": {
+      "first_name": "Anna",
+      "last_name": "Annovna",
+      "surname": null,
+      "email": "annovna@sky.pro",
+      "created": 2,
+      "is_active": true
+    }
+  },
+  {
+    "model": "mailing_list.mailinglistmessage",
+    "pk": 1,
+    "fields": {
+      "subject": "Тестовая рассылка",
+      "body": "Тестовая рассылка для заполнения фикстур",
+      "created": "2023-07-07T10:52:29.082Z"
+    }
+  },
+  {
+    "model": "mailing_list.mailinglist",
+    "pk": 1,
+    "fields": {
+      "message": 1,
+      "time": "13:52:31",
+      "start": "2023-07-07T13:52:31Z",
+      "finish": "2023-07-07T13:52:31Z",
+      "periodicity": "разовая",
+      "status": "создана"
+    }
+  },
+  {
+    "model": "mailing_list.mailinglistlogs",
+    "pk": 1,
+    "fields": {
+      "sending": 1,
+      "send_time": "2023-07-07T10:52:52.823Z",
+      "status": "delivered",
+      "response": ""
+    }
+  }
+]
