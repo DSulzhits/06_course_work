@@ -10,7 +10,7 @@ class Client(models.Model):
     last_name = models.CharField(max_length=150, verbose_name='фамилия', **NULLABLE)
     surname = models.CharField(max_length=150, verbose_name='отчество', **NULLABLE)
     email = models.EmailField(max_length=150, verbose_name='почта')
-    created = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='создан')
+    created = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, **NULLABLE, verbose_name='создан')
     is_active = models.BooleanField(default=True, verbose_name='активный')
 
     def __str__(self):
@@ -19,6 +19,7 @@ class Client(models.Model):
     class Meta:
         verbose_name = 'Клиент'
         verbose_name_plural = 'Клиенты'
+        ordering = ('last_name',)
 
 
 class MailingListMessage(models.Model):
