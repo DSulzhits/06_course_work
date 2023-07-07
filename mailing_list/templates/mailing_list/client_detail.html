@@ -27,7 +27,11 @@
                     </tr>
                     <tr>
                         <td>Активный:</td>
-                        <td>{{ product.is_active }}</td>
+                        {% if client.is_active %}
+                            <td>Да</td>
+                        {% else %}
+                            <td>Нет</td>
+                        {% endif %}
                     </tr>
                 </table>
             </div>
