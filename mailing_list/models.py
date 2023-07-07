@@ -31,7 +31,7 @@ class MailingListMessage(models.Model):
         verbose_name_plural = 'Сообщения'
 
 
-class MailingListSettings(models.Model):
+class MailingList(models.Model):
     ONCE = 'разовая'
     DAILY = 'ежедневно'
     WEEKLY = 'еженедельно'
@@ -78,7 +78,7 @@ class MailingListLogs(models.Model):
         (NOT_DELIVERED, 'не доставлено'),
     )
 
-    sending = models.ForeignKey(MailingListSettings, on_delete=models.CASCADE, verbose_name='рассылка')
+    sending = models.ForeignKey(MailingList, on_delete=models.CASCADE, verbose_name='рассылка')
     send_time = models.DateTimeField(auto_now_add=True, verbose_name='время отправки')
     status = models.CharField(choices=STATUS, verbose_name='статус рассылки')
     response = models.TextField(**NULLABLE, verbose_name='ответ почтового сервера')
