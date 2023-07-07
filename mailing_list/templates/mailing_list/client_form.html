@@ -13,6 +13,10 @@
             </div>
             <div class="card-footer">
                 <a href="{% url 'mailing_list:client_list' %}" class="btn btn-primary"><< Назад</a>
+                {% if object %}
+                    <a href="{% url 'mailing_list:client_delete' object.pk %}"
+                       class="btn btn-danger float-right">Удалить</a>
+                {% endif %}
             </div>
         </div>
     </div>
