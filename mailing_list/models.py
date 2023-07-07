@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import date, datetime
+from django.conf import settings
 
 NULLABLE = {'blank': True, 'null': True}
 
@@ -9,6 +10,8 @@ class Client(models.Model):
     last_name = models.CharField(max_length=150, verbose_name='фамилия', **NULLABLE)
     surname = models.CharField(max_length=150, verbose_name='отчество', **NULLABLE)
     email = models.EmailField(max_length=150, verbose_name='почта')
+    created = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='создан')
+    is_active = models.BooleanField(default=True, verbose_name='активный')
 
     def __str__(self):
         return f'{self.email}'
