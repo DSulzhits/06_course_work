@@ -5,7 +5,7 @@ from django.views.generic import TemplateView, ListView, DetailView, CreateView,
 from django.urls import reverse_lazy
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404, reverse, redirect
-from mailing_list.forms import ClientForm
+from mailing_list.forms import ClientForm, MailingListMessageForm
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 
@@ -93,3 +93,20 @@ class MailingListMessageListView(LoginRequiredMixin, ListView):
 
 class MailingListMessageDetailView(DetailView):
     model = MailingListMessage
+
+
+class MailingListMessageCreateView(LoginRequiredMixin, CreateView):
+    model = MailingListMessage
+    form_class = MailingListMessageForm
+    success_url = reverse_lazy('mailing_list:message_list')
+
+
+class MailingListMessageUpdateView(LoginRequiredMixin, UpdateView):
+    model = MailingListMessage
+    form_class = MailingListMessageForm
+    success_url = reverse_lazy('mailing_list:message_list')
+
+
+class MailingListMessageDeleteView(LoginRequiredMixin, DeleteView):
+    model = MailingListMessage
+    success_url = reverse_lazy('mailing_list:message_list')
