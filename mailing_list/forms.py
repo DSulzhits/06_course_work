@@ -1,6 +1,6 @@
 from django import forms
 
-from mailing_list.models import Client
+from mailing_list.models import Client, MailingListMessage
 
 
 class StyleFormMixin:
@@ -14,3 +14,9 @@ class ClientForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Client
         exclude = ('created', 'is_active',)
+
+
+class MailingListMessageForm(StyleFormMixin, forms.ModelForm):
+    class Meta:
+        model = MailingListMessage
+        fields = '__all__'
