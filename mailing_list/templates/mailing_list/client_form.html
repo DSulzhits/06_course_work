@@ -8,7 +8,7 @@
                     {% csrf_token %}
                     {{ form.as_p }}
                     <input type="submit" class="btn btn-success"
-                           value="{% if object %}Сохранить{% else %}Создать{% endif %}">
+                           value="{% if client %}Сохранить{% else %}Создать{% endif %}">
                     {% if client %}
                         <a href="{% url 'mailing_list:client_toggle_activity' client.pk %}"
                            class="btn btn-warning float-right">

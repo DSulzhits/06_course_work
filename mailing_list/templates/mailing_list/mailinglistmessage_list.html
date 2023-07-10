@@ -10,7 +10,7 @@
                 {% include 'mailing_list/includes/mailing_list_message_card.html' with object=object %}
             {% endfor %}
         </div>
-{#        <a href="{% url 'mailing_list:message_create' %}" class="btn btn-outline-primary m-2">Новая рассылка</a>#}
+        <a href="{% url 'mailing_list:message_create' %}" class="btn btn-outline-primary m-2">Новая рассылка</a>
 {#        <a href="{% url 'mailing_list:client_list' %}" class="btn btn-outline-success m-2">Активные клиенты</a>#}
 {#        <a href="{% url 'mailing_list:client_deactivated_list' %}" class="btn btn-outline-secondary m-2">Неактивные#}
 {#            клиенты</a>#}
