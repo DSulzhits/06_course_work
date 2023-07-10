@@ -35,6 +35,9 @@ class UserUpdateView(UpdateView):
     success_url = reverse_lazy('users:profile')
     form_class = UserForm
 
+    def get_object(self, queryset=None):
+        return self.request.user
+
 
 def generate_new_password(request):
     new_password = ''.join([str(random.randint(0, 9)) for _ in range(12)])
