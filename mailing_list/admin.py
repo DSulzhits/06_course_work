@@ -9,7 +9,7 @@ class ClientAdmin(admin.ModelAdmin):
 
 @admin.register(MailingListMessage)
 class MailingListMessageAdmin(admin.ModelAdmin):
-    list_display = ('subject', 'created',)
+    list_display = ('subject', 'created_time',)
 
 
 @admin.register(MailingList)

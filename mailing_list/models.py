@@ -25,7 +25,7 @@ class Client(models.Model):
 class MailingListMessage(models.Model):
     subject = models.CharField(max_length=200, verbose_name='тема письма')
     body = models.TextField(verbose_name='сообщение')
-    created = models.DateTimeField(auto_now_add=True, verbose_name='создано')
+    created_time = models.DateTimeField(auto_now_add=True, verbose_name='создано')
 
     def __str__(self):
         return f'{self.subject}'
