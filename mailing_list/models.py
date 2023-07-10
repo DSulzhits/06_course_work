@@ -64,6 +64,7 @@ class MailingList(models.Model):
     finish = models.DateTimeField(default=datetime.now, verbose_name='окончание рассылки')
     periodicity = models.CharField(max_length=150, choices=PERIODICITY, verbose_name='периодичность')
     status = models.CharField(max_length=100, default='начало рассылки', choices=SELECT_STATUS, verbose_name='статус')
+    created = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, **NULLABLE, verbose_name='создана')
 
     def __str__(self):
         return self.message.subject
