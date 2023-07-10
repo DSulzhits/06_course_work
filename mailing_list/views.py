@@ -5,7 +5,7 @@ from django.views.generic import TemplateView, ListView, DetailView, CreateView,
 from django.urls import reverse_lazy
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404, reverse, redirect
-from mailing_list.forms import ClientForm, MailingListMessageForm
+from mailing_list.forms import ClientForm, MailingListMessageForm, MailingListForm
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 
@@ -13,9 +13,12 @@ class IndexView(LoginRequiredMixin, TemplateView):
     template_name = 'mailing_list/index.html'
     extra_context = {
         'title_0': 'Наши рассылки',
-        'mailing_lists': MailingListMessage.objects.all(),
-        'title_1': 'Наши клиенты',
-        'client_list': Client.objects.filter(is_active=True),
+        'mailing_list_messages': MailingListMessage.objects.all()[:3],
+        'title_1': 'Конфигурации рассылок',
+        'mailing_lists': MailingList.objects.all()[:3],
+        'title_2': 'Наши клиенты',
+        'client_list': Client.objects.filter(is_active=True)[:3],
+
     }
 
 
@@ -110,3 +113,39 @@ class MailingListMessageUpdateView(LoginRequiredMixin, UpdateView):
 class MailingListMessageDeleteView(LoginRequiredMixin, DeleteView):
     model = MailingListMessage
     success_url = reverse_lazy('mailing_list:message_list')
+
+
+class MailingListListView(LoginRequiredMixin, ListView):
+    model = MailingList
+    extra_context = {
+        'title': 'Конфигурации рассылок',
+        'mailing_lists': MailingList.objects.all(),
+    }
+
+
+class MailingListDetailView(DetailView):
+    model = MailingList
+
+
+class MailingListCreateView(LoginRequiredMixin, CreateView):
+    model = MailingList
+    form_class = MailingListForm
+    success_url = reverse_lazy('mailing_list:mailing_lists_list')
+
+    def form_valid(self, form):
+        self.object = form.save()
+        self.object.created = self.request.user
+        self.object.save()
+
+        return super().form_valid(form)
+
+
+class MailingListUpdateView(LoginRequiredMixin, UpdateView):
+    model = MailingList
+    form_class = MailingListForm
+    success_url = reverse_lazy('mailing_list:mailing_lists_list')
+
+
+class MailingListDeleteView(LoginRequiredMixin, DeleteView):
+    model = MailingList
+    success_url = reverse_lazy('mailing_list:mailing_lists_list')
