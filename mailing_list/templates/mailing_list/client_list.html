@@ -7,7 +7,7 @@
     <div class="container">
         <div class="row text-center">
             {% for object in object_list %}
-                {% include 'mailing_list/includes/client_card.html' with object=object %}
+                {% include 'mailing_list/includes/inc_client_card.html' with object=object %}
             {% endfor %}
         </div>
         <a href="{% url 'mailing_list:client_create' %}" class="btn btn-outline-primary m-2">Новый клиент</a>
