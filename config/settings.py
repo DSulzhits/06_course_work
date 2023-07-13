@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     'mailing_list',
     'users',
+    'vlog',
 ]
 
 MIDDLEWARE = [
