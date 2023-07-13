@@ -1,6 +1,7 @@
 from django.shortcuts import render
 
 from mailing_list.models import Client, MailingListMessage, MailingList, MailingListLogs
+from vlog.models import Record
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.http import Http404
@@ -18,7 +19,8 @@ class IndexView(LoginRequiredMixin, TemplateView):
         'mailing_lists': MailingList.objects.all()[:3],
         'title_2': 'Наши клиенты',
         'client_list': Client.objects.filter(is_active=True)[:3],
-
+        'title_3': 'Записи о рассылках',
+        'records_list': Record.objects.filter(sign_of_publication=True)[:3],
     }
 
 
