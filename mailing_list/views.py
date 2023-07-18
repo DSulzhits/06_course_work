@@ -7,6 +7,7 @@ from mailing_list.forms import ClientForm, MailingListMessageForm, MailingListFo
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from mailing_list.services import send_email
 import django
+from django.http import Http404
 
 
 class IndexView(LoginRequiredMixin, TemplateView):
@@ -53,11 +54,10 @@ class ClientDetailView(LoginRequiredMixin, DetailView):
     model = Client
 
 
-class ClientCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+class ClientCreateView(LoginRequiredMixin, CreateView):
     model = Client
     form_class = ClientForm
     success_url = reverse_lazy('mailing_list:client_list')
-    permission_required = 'mailing_list.add_client'
 
     def form_valid(self, form):
         self.object = form.save()
@@ -67,11 +67,16 @@ class ClientCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class ClientUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+class ClientUpdateView(LoginRequiredMixin, UpdateView):
     model = Client
     form_class = ClientForm
-    permission_required = 'mailing_list.change_client'
     success_url = reverse_lazy('mailing_list:client_list')
+
+    def get_object(self, queryset=None):
+        self.object = super().get_object(queryset)
+        if self.object.created != self.request.user and not self.request.user.is_staff:
+            raise Http404
+        return self.object
 
 
 class ClientDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
@@ -102,17 +107,22 @@ class MailingListMessageDetailView(LoginRequiredMixin, DetailView):
     model = MailingListMessage
 
 
-class MailingListMessageCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+class MailingListMessageCreateView(LoginRequiredMixin, CreateView):
     model = MailingListMessage
     form_class = MailingListMessageForm
-    permission_required = 'mailing_list.add_message'
     success_url = reverse_lazy('mailing_list:message_list')
 
+    def form_valid(self, form):
+        self.object = form.save()
+        self.object.created = self.request.user
+        self.object.save()
 
-class MailingListMessageUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+        return super().form_valid(form)
+
+
+class MailingListMessageUpdateView(LoginRequiredMixin, UpdateView):
     model = MailingListMessage
     form_class = MailingListMessageForm
-    permission_required = 'mailing_list.change_message'
     success_url = reverse_lazy('mailing_list:message_list')
 
 
@@ -134,10 +144,9 @@ class MailingListDetailView(LoginRequiredMixin, DetailView):
     model = MailingList
 
 
-class MailingListCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+class MailingListCreateView(LoginRequiredMixin, CreateView):
     model = MailingList
     form_class = MailingListForm
-    permission_required = 'mailing_list.add_mailinglist'
     success_url = reverse_lazy('mailing_list:mailing_lists_list')
     try:
         for mailing in MailingList.objects.all():
@@ -154,10 +163,9 @@ class MailingListCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateV
         return super().form_valid(form)
 
 
-class MailingListUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+class MailingListUpdateView(LoginRequiredMixin, UpdateView):
     model = MailingList
     form_class = MailingListForm
-    permission_required = 'mailing_list.change_mailinglist'
     success_url = reverse_lazy('mailing_list:mailing_lists_list')
 
 
