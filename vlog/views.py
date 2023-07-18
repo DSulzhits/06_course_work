@@ -1,10 +1,11 @@
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from vlog.models import Record
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.urls import reverse_lazy
 from vlog.services import send_email
 from django.shortcuts import get_object_or_404, reverse, redirect
 from vlog.forms import RecordForm
+from django.http import Http404
 
 
 class RecordListView(LoginRequiredMixin, ListView):
@@ -54,7 +55,6 @@ class RecordCreateView(LoginRequiredMixin, CreateView):
     """Контроллер для создания блоговой записи"""
     model = Record
     form_class = RecordForm
-    permission_required = 'catalog.add_record'
     success_url = reverse_lazy('vlog:records')
 
     def form_valid(self, form):
@@ -69,11 +69,16 @@ class RecordUpdateView(LoginRequiredMixin, UpdateView):
     """Контроллер для обновления блоговой записи"""
     model = Record
     form_class = RecordForm
-    permission_required = 'vlog.change_record'
     success_url = reverse_lazy('vlog:records')
 
+    def get_object(self, queryset=None):
+        self.object = super().get_object(queryset)
+        if self.object.author != self.request.user and not self.request.user.is_staff:
+            raise Http404
+        return self.object
 
-class RecordDeleteView(LoginRequiredMixin, DeleteView):
+
+class RecordDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     """Контроллер для удаления блоговой записи"""
     model = Record
     permission_required = 'vlog.delete_record'
