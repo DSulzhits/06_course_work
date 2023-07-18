@@ -19,7 +19,7 @@ class ClientForm(StyleFormMixin, forms.ModelForm):
 class MailingListMessageForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = MailingListMessage
-        fields = '__all__'
+        exclude = ('created',)
 
 
 class MailingListForm(StyleFormMixin, forms.ModelForm):
