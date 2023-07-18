@@ -17,6 +17,10 @@
                         <td>Создано:</td>
                         <td>{{ mailinglistmessage.created_time }}</td>
                     </tr>
+                    <tr>
+                        <td>Создатель:</td>
+                        <td>{{ mailinglistmessage.created|default:'-' }}</td>
+                    </tr>
 
                 </table>
             </div>
