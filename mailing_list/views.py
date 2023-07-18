@@ -1,11 +1,8 @@
-from django.shortcuts import render
-
 from mailing_list.models import Client, MailingListMessage, MailingList, MailingListLogs
 from vlog.models import Record
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from django.http import Http404
-from django.shortcuts import render, get_object_or_404, reverse, redirect
+from django.shortcuts import get_object_or_404, reverse, redirect
 from mailing_list.forms import ClientForm, MailingListMessageForm, MailingListForm
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from mailing_list.services import send_email
@@ -33,7 +30,7 @@ class ClientListView(LoginRequiredMixin, ListView):
     }
 
     def get_queryset(self):
-        """Метод благодаря которому отображаются только неактивные записи"""
+        """Метод благодаря которому отображаются только активные клиенты"""
         queryset = super().get_queryset()
         queryset = queryset.filter(is_active=True)
         return queryset
@@ -46,20 +43,21 @@ class ClientDeactivatedListView(LoginRequiredMixin, ListView):
     }
 
     def get_queryset(self):
-        """Метод благодаря которому отображаются только неактивные записи"""
+        """Метод благодаря которому отображаются только неактивные клиенты"""
         queryset = super().get_queryset()
         queryset = queryset.filter(is_active=False)
         return queryset
 
 
-class ClientDetailView(DetailView):
+class ClientDetailView(LoginRequiredMixin, DetailView):
     model = Client
 
 
-class ClientCreateView(LoginRequiredMixin, CreateView):
+class ClientCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Client
     form_class = ClientForm
     success_url = reverse_lazy('mailing_list:client_list')
+    permission_required = 'mailing_list.add_client'
 
     def form_valid(self, form):
         self.object = form.save()
@@ -69,14 +67,16 @@ class ClientCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class ClientUpdateView(UpdateView):
+class ClientUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Client
     form_class = ClientForm
+    permission_required = 'mailing_list.change_client'
     success_url = reverse_lazy('mailing_list:client_list')
 
 
-class ClientDeleteView(DeleteView):
+class ClientDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = Client
+    permission_required = 'mailing_list.delete_client'
     success_url = reverse_lazy('mailing_list:client_list')
 
 
@@ -98,24 +98,27 @@ class MailingListMessageListView(LoginRequiredMixin, ListView):
     }
 
 
-class MailingListMessageDetailView(DetailView):
+class MailingListMessageDetailView(LoginRequiredMixin, DetailView):
     model = MailingListMessage
 
 
-class MailingListMessageCreateView(LoginRequiredMixin, CreateView):
+class MailingListMessageCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = MailingListMessage
     form_class = MailingListMessageForm
+    permission_required = 'mailing_list.add_message'
     success_url = reverse_lazy('mailing_list:message_list')
 
 
-class MailingListMessageUpdateView(LoginRequiredMixin, UpdateView):
+class MailingListMessageUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = MailingListMessage
     form_class = MailingListMessageForm
+    permission_required = 'mailing_list.change_message'
     success_url = reverse_lazy('mailing_list:message_list')
 
 
-class MailingListMessageDeleteView(LoginRequiredMixin, DeleteView):
+class MailingListMessageDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = MailingListMessage
+    permission_required = 'mailing_list.delete_message'
     success_url = reverse_lazy('mailing_list:message_list')
 
 
@@ -127,13 +130,14 @@ class MailingListListView(LoginRequiredMixin, ListView):
     }
 
 
-class MailingListDetailView(DetailView):
+class MailingListDetailView(LoginRequiredMixin, DetailView):
     model = MailingList
 
 
-class MailingListCreateView(LoginRequiredMixin, CreateView):
+class MailingListCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = MailingList
     form_class = MailingListForm
+    permission_required = 'mailing_list.add_mailinglist'
     success_url = reverse_lazy('mailing_list:mailing_lists_list')
     try:
         for mailing in MailingList.objects.all():
@@ -150,14 +154,16 @@ class MailingListCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class MailingListUpdateView(LoginRequiredMixin, UpdateView):
+class MailingListUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = MailingList
     form_class = MailingListForm
+    permission_required = 'mailing_list.change_mailinglist'
     success_url = reverse_lazy('mailing_list:mailing_lists_list')
 
 
-class MailingListDeleteView(LoginRequiredMixin, DeleteView):
+class MailingListDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = MailingList
+    permission_required = 'mailing_list.delete_mailinglist'
     success_url = reverse_lazy('mailing_list:mailing_lists_list')
 
 
