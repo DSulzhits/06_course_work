@@ -8,6 +8,8 @@ from django.http import Http404
 from django.shortcuts import render, get_object_or_404, reverse, redirect
 from mailing_list.forms import ClientForm, MailingListMessageForm, MailingListForm
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from mailing_list.services import send_email
+import django
 
 
 class IndexView(LoginRequiredMixin, TemplateView):
@@ -19,7 +21,7 @@ class IndexView(LoginRequiredMixin, TemplateView):
         'mailing_lists': MailingList.objects.all()[:3],
         'title_2': 'Наши клиенты',
         'client_list': Client.objects.filter(is_active=True)[:3],
-        'title_3': 'Записи о рассылках',
+        'title_records': 'Записи о рассылках',
         'records_list': Record.objects.filter(sign_of_publication=True)[:3],
     }
 
@@ -133,6 +135,12 @@ class MailingListCreateView(LoginRequiredMixin, CreateView):
     model = MailingList
     form_class = MailingListForm
     success_url = reverse_lazy('mailing_list:mailing_lists_list')
+    try:
+        for mailing in MailingList.objects.all():
+            if mailing.status == MailingList.CREATED:
+                send_email(MailingList.ONCE)
+    except django.db.utils.ProgrammingError:
+        print('ProgrammingError')
 
     def form_valid(self, form):
         self.object = form.save()
@@ -151,3 +159,15 @@ class MailingListUpdateView(LoginRequiredMixin, UpdateView):
 class MailingListDeleteView(LoginRequiredMixin, DeleteView):
     model = MailingList
     success_url = reverse_lazy('mailing_list:mailing_lists_list')
+
+
+class MailingListLogsListView(LoginRequiredMixin, ListView):
+    model = MailingListLogs
+    extra_context = {
+        'title': 'Логи рассылок',
+        'mailing_lists': MailingListLogs.objects.all(),
+    }
+
+
+class MailingListLogsDetailView(LoginRequiredMixin, DetailView):
+    model = MailingListLogs
