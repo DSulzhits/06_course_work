@@ -14,7 +14,7 @@
             </div>
             <div class="card-footer">
                 <a href="{% url 'mailing_list:message_list' %}" class="btn btn-primary"><< Назад</a>
-                {% if mailinglistmessage %}
+                {% if mailinglistmessage and user.is_staff or mailinglistmessage and perms.mailing_list.delete_message%}
                     <a href="{% url 'mailing_list:message_delete' mailinglistmessage.pk %}"
                        class="btn btn-danger float-right">Удалить</a>
                 {% endif %}
