@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+# from django_crontab.crontab import Crontab
+# import fcntl
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -41,6 +43,7 @@ INSTALLED_APPS = [
     'mailing_list',
     'users',
     'vlog',
+    'django_crontab',
 ]
 
 MIDDLEWARE = [
@@ -158,3 +161,9 @@ EMAIL_USE_SSL = True
 EMAIL_SERVER = EMAIL_HOST_USER
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 EMAIL_ADMIN = EMAIL_HOST_USER
+
+CRONJOBS = [
+    ('0 12 * * *', 'mailing_list.services.send_email', ['ежедневно']),
+    ('0 12 * * 1', 'mailing_list.services.send_email', ['еженедельно']),
+    ('0 12 1 * *', 'mailing_list.services.send_email', ['ежемесячно']),
+]
