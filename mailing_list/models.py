@@ -26,6 +26,7 @@ class MailingListMessage(models.Model):
     subject = models.CharField(max_length=200, verbose_name='тема письма')
     body = models.TextField(verbose_name='сообщение')
     created_time = models.DateTimeField(auto_now_add=True, verbose_name='создано')
+    created = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, **NULLABLE, verbose_name='создана')
 
     def __str__(self):
         return f'{self.subject}'
