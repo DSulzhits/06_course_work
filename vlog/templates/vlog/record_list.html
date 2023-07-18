@@ -3,7 +3,7 @@
     <div class="container">
         <div class="row text-center">
             {% for object in record_list %}
-                {% include 'vlog/includes/inc_record_form.html' %}
+                {% include 'vlog/includes/inc_record_card.html' %}
             {% endfor %}
         </div>
         <a href="{% url 'vlog:record_create' %}" class="btn btn-outline-success m-2">Создать запись</a>

@@ -30,7 +30,7 @@
             <p class="lead">{{ title_records }}</p>
             <div class="row text-center">
                 {% for object in records_list %}
-                    {% include 'vlog/includes/inc_record_form.html' with object=object %}
+                    {% include 'vlog/includes/inc_record_card.html' with object=object %}
                 {% endfor %}
             </div>
         </div>

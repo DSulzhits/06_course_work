@@ -9,7 +9,7 @@
                     {{ form.as_p }}
                     <input type="submit" class="btn btn-success"
                            value="{% if object %}Сохранить{% else %}Создать{% endif %}">
-                    {% if object and perms.catalog.change_blogrecord %}
+                    {% if object %}
                         <a href="{% url 'vlog:toggle_activity' object.slug %}"
                            class="btn btn-warning float-right">
                         {% if object.sign_of_publication %}
@@ -24,7 +24,7 @@
             </div>
             <div class="card-footer">
                 <a href="{% url 'vlog:records' %}" class="btn btn-primary"><< Назад</a>
-                {% if object and perms.catalog.delete_blogrecord %}
+                {% if record and user.is_staff or record and perms.vlog.delete_record %}
                     <a href="{% url 'vlog:record_delete' object.slug %}" class="btn btn-danger float-right">Удалить</a>
                 {% endif %}
             </div>
