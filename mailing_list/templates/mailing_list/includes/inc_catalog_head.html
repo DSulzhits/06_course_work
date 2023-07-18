@@ -12,4 +12,7 @@
         <a href="{% url 'users:login' %}" class="p-2 btn btn-outline-primary">Вход</a>
         <a href="{% url 'users:register' %}" class="p-2 btn btn-outline-primary">Регистрация</a>
     {% endif %}
+    {% if user.is_superuser %}
+        <a href="/admin/" class="p-2 btn btn-success">Админка</a>
+    {% endif %}
 </nav>
