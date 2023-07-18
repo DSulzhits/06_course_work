@@ -19,6 +19,8 @@ class IndexView(LoginRequiredMixin, TemplateView):
         'mailing_lists': MailingList.objects.all()[:3],
         'title_2': 'Наши клиенты',
         'client_list': Client.objects.filter(is_active=True)[:3],
+        'title_logs': 'Логи рассылок',
+        'logs_list': MailingListLogs.objects.all()[:3],
         'title_records': 'Записи о рассылках',
         'records_list': Record.objects.filter(sign_of_publication=True)[:3],
     }
